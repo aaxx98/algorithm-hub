@@ -1,56 +1,54 @@
-import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 public class Main {
-	static int n=0;
-    static int count=0;
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        n = Integer.parseInt(br.readLine());
-        int[] queens = new int[n];
-       
-        nQueen(0, queens);
-        bw.write(String.valueOf(count));
+  static int[] queens;
+  static int n;
+  static int cnt = 0;
 
-		bw.flush();
-		bw.close();
-	}
-    public static void nQueen(int k, int[] queens){
-        if(k==n){
-            count++;
-            //printQ(queens);
-            return;
-        }
-        for(int i=0;i<n;i++){
-    		queens[k]=i;
-        	if(k<n && !check(queens,k)) {
-        		nQueen(k+1,queens);
-        	}        
-        }
-        return;
+  public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    n = Integer.parseInt(br.readLine());
+    queens = new int[n];
+
+    nQueen(0);
+    bw.write(cnt + " ");
+
+    bw.flush();
+    bw.close();
+    br.close();
+  }
+
+  static void nQueen(int idx) {
+    if (idx == n) {
+      cnt++;
+      return;
     }
+    for (int i = 0; i < n; i++) {
+      queens[idx] = i;
+      if (check(idx)) {
+        nQueen(idx + 1);
+      }
+    }
+  }
 
-    public static boolean check(int[] q, int k){
-        for(int i=0;i<k;i++){
-        	if(q[k]==q[i]) { 
-        		return true;
-        	}
-        	//대각선
-            if(Math.abs(k-i)==Math.abs(q[k]-q[i])) {
-            	return true;
-            }
-        }
-        
+  static boolean check(int idx) {
+    for (int i = 0; i < idx; i++) {
+      // 상하
+      if (queens[i] == queens[idx]) {
         return false;
+      }
+      // 대각선
+      else if (idx - i == Math.abs(queens[idx] - queens[i])) {
+        return false;
+      }
     }
-    
-    public static void printQ(int[] q) {
-    	for(int i=0;i<n;i++) {
-    		System.out.print(q[i]+" ");
-    	}
-    	System.out.println();
-    }
+
+    return true;
+  }
 }
