@@ -19,20 +19,13 @@ public class Main {
       if (i % 5 == 0) {
         memo[i] = i / 5;
       }
-      int k = 3;
-      while (k < n) {
-        int r = i - k;
-//        System.out.println(i + ": " + r + ", " + k);
-        if (r <= 0) {
-          break;
+      if (memo[i - 3] > 0) {
+        memo[i] = memo[i - 3] + 1;
+      }
+      if (i - 5 > 0 && memo[i - 5] > 0) {
+        if (memo[i] > 0) {
+          memo[i] = Math.min(memo[i], memo[i - 5] + 1);
         }
-//        System.out.println(memo[k] + ", " + memo[r]);
-        if (memo[k] > 0 && memo[r] > 0) {
-          if (memo[i] > memo[k] + memo[r] || memo[i] == 0) {
-            memo[i] = memo[k] + memo[r];
-          }
-        }
-        k++;
       }
     }
     if (memo[n] == 0) {
