@@ -1,0 +1,84 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+
+public class Main {
+
+  static int k, cnt = 0, num = -1;
+
+  public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    StringTokenizer st = new StringTokenizer(br.readLine());
+    int n = Integer.parseInt(st.nextToken());
+    k = Integer.parseInt(st.nextToken());
+
+    st = new StringTokenizer(br.readLine());
+    int[] arr = new int[n];
+    for (int i = 0; i < n; i++) {
+      arr[i] = Integer.parseInt(st.nextToken());
+    }
+
+    mergeSort(arr, 0, n - 1);
+
+    bw.write(String.valueOf(num));
+    bw.flush();
+    bw.close();
+    br.close();
+
+  }
+
+  public static void mergeSort(int[] arr, int left, int right) {
+    if (left >= right) {
+      return;
+    }
+    int mid = (left + right) / 2;
+
+    mergeSort(arr, left, mid);
+    mergeSort(arr, mid + 1, right);
+
+    merge(arr, left, mid, right);
+  }
+
+  public static void merge(int[] arr, int left, int mid, int right) {
+    int[] temp = new int[right - left + 1];
+    int i = left, j = mid + 1, t = 0;
+
+    while (i <= mid && j <= right) {
+      if (arr[i] <= arr[j]) {
+        temp[t++] = arr[i++];
+      } else {
+        temp[t++] = arr[j++];
+      }
+      cnt++;
+      if (cnt == k) {
+        num = temp[t - 1];
+        return;
+      }
+    }
+
+    while (i <= mid) {
+      temp[t++] = arr[i++];
+      cnt++;
+      if (cnt == k) {
+        num = temp[t - 1];
+        return;
+      }
+    }
+    while (j <= right) {
+      temp[t++] = arr[j++];
+      cnt++;
+      if (cnt == k) {
+        num = temp[t - 1];
+        return;
+      }
+    }
+    System.arraycopy(
+        temp, 0,
+        arr, left,
+        right - left + 1);
+  }
+}
